@@ -40,7 +40,7 @@ Ask Hermes natural language weather questions and it calls the right tools:
 
 ## Model Image Products
 
-22+ fields with NWS Solarpower07 colormaps, state borders, colorbars, scientific titles:
+22+ fields with NWS Solarpower07 color tables, state borders, colorbars, scientific titles:
 
 **Instability**: CAPE (surface, mixed-layer, most-unstable, 0-3km), CIN
 **Shear/Helicity**: SRH 0-1km, SRH 0-3km, updraft helicity, 0-6km bulk shear, 0-1km bulk shear
@@ -83,7 +83,7 @@ Plugin (Python)
   └── Calculations: metrust-py (205 functions, PyO3 → Rust)
 ```
 
-All rendering uses the Solarpower07 colormap library with Lambert Conformal projection, state/country borders, and proper colorbars. Average render time: **177ms per image**.
+All rendering uses the Solarpower07 color table library with Lambert Conformal projection, state/country borders, and proper colorbars. Average render time: **177ms per image**.
 
 **No matplotlib in the rendering path.** Pure Rust rasterization via wrf-render.
 
@@ -96,7 +96,7 @@ cfrust     — Pure Rust GRIB2 decoder (replaces cfgrib/eccodes)
 rusbie     — 45-model NWP downloader with byte-range .idx filtering
 rustweather — One-liner plotting wrapper
 rustplots   — MetPy-compatible plotting
-wrf-rust    — Solarpower07 colormaps + Rust rasterizer (render_grib)
+wrf-rust    — Solarpower07 color tables + Rust rasterizer
 ```
 
 ### Rust binary
@@ -112,7 +112,7 @@ pip install metrust cfrust rusbie rustweather
 
 # 2. Install from source (not yet on PyPI)
 pip install -e /path/to/rustplots
-pip install -e /path/to/wrf-rust-plots
+pip install -e /path/to/wrf-rust
 
 # 3. Build radar binary
 cd /path/to/rustdar
@@ -155,7 +155,6 @@ export RADAR_RENDER_PATH=/path/to/radar-render
 
 ## Credits
 
-- **Colormaps**: Solarpower07 — NWS-grade discrete color palettes and product style definitions
-- **Rendering engine**: wrf-render (Rust rasterizer adapted from wrf-rust-plots)
+- **Color Tables**: Solarpower07 — NWS-grade discrete color palettes and product style definitions
 - **Meteorological calculations**: metrust — 205 functions verified against MetPy test suites
 - **Plugin platform**: [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research
