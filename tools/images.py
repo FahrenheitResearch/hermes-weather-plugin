@@ -246,7 +246,7 @@ def wx_model_image(args: dict, **kwargs) -> str:
             try:
                 rust_ok = False
 
-                # Try Rust renderer (fast, NWS-grade colormaps)
+                # Try Rust renderer (fast, Solarpower07 color tables)
                 meta = _PRODUCT_META.get(var.lower())
                 solar_key = meta[0] if meta else None
                 if solar_key:

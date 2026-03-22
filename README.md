@@ -1,6 +1,6 @@
 # Hermes Weather Plugin
 
-A native [Hermes Agent](https://github.com/NousResearch/hermes-agent) plugin that provides real-time weather data, NWS-grade model imagery, NEXRAD radar, and verified meteorological calculations. Built entirely on a Rust-backed weather stack — no legacy dependencies.
+A native [Hermes Agent](https://github.com/NousResearch/hermes-agent) plugin that provides real-time weather data, high-quality model imagery, NEXRAD radar, and verified meteorological calculations. Built entirely on a Rust-backed weather stack — no legacy dependencies.
 
 ## What It Does
 
@@ -8,7 +8,7 @@ Ask Hermes natural language weather questions and it calls the right tools:
 
 - **"How's the weather in Portland?"** → current conditions from NWS API
 - **"Show me the radar near OKC"** → NEXRAD Level 2 radar PNG (1024px, 200km, noise-filtered)
-- **"Show me CAPE and SRH on the latest HRRR f18"** → two NWS-grade model maps in one call
+- **"Show me CAPE and SRH on the latest HRRR f18"** → two high-quality model maps in one call
 - **"Calculate the LCL for 30°C and 20°C dewpoint at 1000mb"** → verified metrust calculation
 - **"Get me a sounding for Oklahoma City"** → 40-level profile with CAPE, CIN, SRH, shear, LCL, STP
 
@@ -130,7 +130,7 @@ export RADAR_RENDER_PATH=/path/to/radar-render
 | Metric | Value |
 |--------|-------|
 | Model image render (Rust) | **177ms avg** |
-| 22 NWS-grade maps | **18s total** (incl. download) |
+| 22 high-quality maps | **18s total** (incl. download) |
 | 15 maps from cache | **3.1s total** |
 | Radar image (NEXRAD L2) | **~3s** (download + render) |
 | Sounding (40 levels + params) | **~15s** (download-heavy) |
@@ -155,6 +155,6 @@ export RADAR_RENDER_PATH=/path/to/radar-render
 
 ## Credits
 
-- **Color Tables**: Solarpower07 — NWS-grade discrete color palettes and product style definitions
+- **Color Tables**: Solarpower07 — high-quality discrete color palettes and product style definitions
 - **Meteorological calculations**: metrust — 205 functions verified against MetPy test suites
 - **Plugin platform**: [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research
