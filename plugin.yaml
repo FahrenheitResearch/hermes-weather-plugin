@@ -1,0 +1,8 @@
+name: weather
+version: 2.0.0
+description: >
+  Weather data, radar/model imagery, and verified meteorological calculations.
+  Built on metrust, cfrust, rusbie, rustweather, and rustdar — zero legacy dependencies.
+provides:
+  tools: true
+  hooks: false
