@@ -1,4 +1,4 @@
-# Hermes Weather Plugin
+﻿# Hermes Weather Plugin
 
 Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent). 13 tools covering current conditions, forecasts, alerts, model imagery, radar, and meteorological calculations across an expanded backend model set.
 
@@ -50,7 +50,7 @@ Average render time: 177ms per image.
 - `wx_model_image`: verified surface/image subset
   - `aigfs`, `gdas`, `gefs`, `gfs`, `graphcast`, `hiresw`, `hrrr`, `hrrrak`, `nam`, `nbm`, `rap`
 - `wx_sounding`: verified profile subset
-  - `gfs`, `graphcast`, `hrrr`, `hrrrak`, `rrfs`
+  - `gdas`, `gfs`, `graphcast`, `hrrr`, `hrrrak`, `rrfs`
 - `wx_ecape`: uses the same verified profile subset as `wx_sounding`
 
 Models outside those sets may exist in the backend stack, but they are not exposed in Hermes until the extraction path is verified against the actual tool behavior.
@@ -86,11 +86,11 @@ Models outside those sets may exist in the backend stack, but they are not expos
 
 ```
 Plugin (Python)
-  ├── Data: requests → NWS / SPC / METAR / Open-Meteo APIs
-  ├── Model images: rusbie → cfrust → wrf-render
-  │                  (download)  (decode)  (rasterize)
-  ├── Radar: radar-render binary (rustdar)
-  └── Calculations: metrust-py (205 functions, PyO3 → Rust)
+  â”œâ”€â”€ Data: requests â†’ NWS / SPC / METAR / Open-Meteo APIs
+  â”œâ”€â”€ Model images: rusbie â†’ cfrust â†’ wrf-render
+  â”‚                  (download)  (decode)  (rasterize)
+  â”œâ”€â”€ Radar: radar-render binary (rustdar)
+  â””â”€â”€ Calculations: metrust-py (205 functions, PyO3 â†’ Rust)
 ```
 
 No eccodes, no Fortran, no C libraries in the Rust components. The only system dependency is a working Python environment.
@@ -98,18 +98,18 @@ No eccodes, no Fortran, no C libraries in the Rust components. The only system d
 ## Python Packages
 
 ```
-metrust      — 205 meteorological calculations (PyO3 → Rust)
-cfrust       — GRIB2 decoder (pure Rust, replaces cfgrib/eccodes)
-rusbie       — NWP downloader with byte-range .idx filtering
-rustweather  — Plotting wrapper
-rustplots    — MetPy-compatible plotting
-wrf-rust     — Solarpower07 color tables + rasterizer
+metrust      â€” 205 meteorological calculations (PyO3 â†’ Rust)
+cfrust       â€” GRIB2 decoder (pure Rust, replaces cfgrib/eccodes)
+rusbie       â€” NWP downloader with byte-range .idx filtering
+rustweather  â€” Plotting wrapper
+rustplots    â€” MetPy-compatible plotting
+wrf-rust     â€” Solarpower07 color tables + rasterizer
 ```
 
 ## Rust Binary
 
 ```
-radar-render — NEXRAD Level 2 download + parse + render (from rustdar)
+radar-render â€” NEXRAD Level 2 download + parse + render (from rustdar)
 ```
 
 ## Setup
@@ -155,17 +155,17 @@ export ECAPE_RS_RUNNER=/path/to/run_case
 
 ```
 ~/.hermes/plugins/weather/
-├── plugin.yaml          # Hermes plugin manifest
-├── __init__.py          # register(ctx) — wires 13 tools
-├── schemas.py           # Tool schemas (what the LLM sees)
-├── nws.py               # NWS/METAR/SPC/Open-Meteo API client
-├── skill.md             # Usage guide for the LLM
-├── tools/
-│   ├── __init__.py
-│   ├── data.py          # NWS API handlers
-│   ├── images.py        # Rust renderer + radar handlers
-│   └── calc.py          # metrust calculations + sounding + ecape-rs bridge
-└── README.md
+â”œâ”€â”€ plugin.yaml          # Hermes plugin manifest
+â”œâ”€â”€ __init__.py          # register(ctx) â€” wires 13 tools
+â”œâ”€â”€ schemas.py           # Tool schemas (what the LLM sees)
+â”œâ”€â”€ nws.py               # NWS/METAR/SPC/Open-Meteo API client
+â”œâ”€â”€ skill.md             # Usage guide for the LLM
+â”œâ”€â”€ tools/
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ data.py          # NWS API handlers
+â”‚   â”œâ”€â”€ images.py        # Rust renderer + radar handlers
+â”‚   â””â”€â”€ calc.py          # metrust calculations + sounding + ecape-rs bridge
+â””â”€â”€ README.md
 ```
 
 ## Credits
@@ -173,3 +173,4 @@ export ECAPE_RS_RUNNER=/path/to/run_case
 - **Color tables**: [Solarpower07](https://github.com/Solarpower07) -- discrete color palettes and product style definitions used for all model imagery
 - **Meteorological calculations**: metrust -- 205 functions verified against MetPy test suites
 - **Plugin platform**: [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research
+

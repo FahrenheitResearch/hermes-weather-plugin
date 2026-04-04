@@ -15,6 +15,7 @@ IMAGE_MODELS = [
 ]
 
 PROFILE_MODELS = [
+    "gdas",
     "gfs",
     "graphcast",
     "hrrr",

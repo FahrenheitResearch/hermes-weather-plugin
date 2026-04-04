@@ -39,6 +39,19 @@
     "abs_diff_cape_jkg": 0.0
   },
   {
+    "model": "gdas",
+    "status": "ok",
+    "plugin_ecape_jkg": 23.176419737105107,
+    "direct_ecape_jkg": 23.176419737105107,
+    "abs_diff_ecape_jkg": 0.0,
+    "plugin_ncape_jkg": 1161.3638476105812,
+    "direct_ncape_jkg": 1161.3638476105812,
+    "abs_diff_ncape_jkg": 0.0,
+    "plugin_cape_jkg": 1.8442857677839595e-06,
+    "direct_cape_jkg": 1.8442857677839595e-06,
+    "abs_diff_cape_jkg": 0.0
+  },
+  {
     "model": "graphcast",
     "status": "ok",
     "plugin_ecape_jkg": 49.52682009736259,
@@ -54,14 +67,14 @@
   {
     "model": "rrfs",
     "status": "ok",
-    "plugin_ecape_jkg": 65.56741361747254,
-    "direct_ecape_jkg": 65.56741361747254,
+    "plugin_ecape_jkg": 57.270644479874136,
+    "direct_ecape_jkg": 57.270644479874136,
     "abs_diff_ecape_jkg": 0.0,
-    "plugin_ncape_jkg": 1307.886703998846,
-    "direct_ncape_jkg": 1307.886703998846,
+    "plugin_ncape_jkg": 1286.0880447560673,
+    "direct_ncape_jkg": 1286.0880447560673,
     "abs_diff_ncape_jkg": 0.0,
-    "plugin_cape_jkg": 6.7682851773793725e-06,
-    "direct_cape_jkg": 6.7682851773793725e-06,
+    "plugin_cape_jkg": 5.023352655643287e-06,
+    "direct_cape_jkg": 5.023352655643287e-06,
     "abs_diff_cape_jkg": 0.0
   }
 ]

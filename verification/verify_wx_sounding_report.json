@@ -33,6 +33,17 @@
     "levels_available": 41
   },
   {
+    "model": "gdas",
+    "status": "ok",
+    "plugin_sbcape_jkg": 0.0,
+    "direct_sbcape_jkg": 0.0,
+    "abs_diff_sbcape_jkg": 0.0,
+    "plugin_mucape_jkg": 0.0,
+    "direct_mucape_jkg": 0.0,
+    "abs_diff_mucape_jkg": 0.0,
+    "levels_available": 41
+  },
+  {
     "model": "graphcast",
     "status": "ok",
     "plugin_sbcape_jkg": 0.0,
