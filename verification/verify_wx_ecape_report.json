@@ -1,0 +1,67 @@
+[
+  {
+    "model": "hrrr",
+    "status": "ok",
+    "plugin_ecape_jkg": 55.382626362262954,
+    "direct_ecape_jkg": 55.382626362262954,
+    "abs_diff_ecape_jkg": 0.0,
+    "plugin_ncape_jkg": 1161.2015593668268,
+    "direct_ncape_jkg": 1161.2015593668268,
+    "abs_diff_ncape_jkg": 0.0,
+    "plugin_cape_jkg": 5.383909071229525e-06,
+    "direct_cape_jkg": 5.383909071229525e-06,
+    "abs_diff_cape_jkg": 0.0
+  },
+  {
+    "model": "hrrrak",
+    "status": "ok",
+    "plugin_ecape_jkg": 88.77688871586156,
+    "direct_ecape_jkg": 88.77688871586156,
+    "abs_diff_ecape_jkg": 0.0,
+    "plugin_ncape_jkg": 234.64593807339384,
+    "direct_ncape_jkg": 234.64593807339384,
+    "abs_diff_ncape_jkg": 0.0,
+    "plugin_cape_jkg": 1.06900686072608e-05,
+    "direct_cape_jkg": 1.06900686072608e-05,
+    "abs_diff_cape_jkg": 0.0
+  },
+  {
+    "model": "gfs",
+    "status": "ok",
+    "plugin_ecape_jkg": 23.3793759105381,
+    "direct_ecape_jkg": 23.3793759105381,
+    "abs_diff_ecape_jkg": 0.0,
+    "plugin_ncape_jkg": 1159.6109466053804,
+    "direct_ncape_jkg": 1159.6109466053804,
+    "abs_diff_ncape_jkg": 0.0,
+    "plugin_cape_jkg": 1.847382003306793e-06,
+    "direct_cape_jkg": 1.847382003306793e-06,
+    "abs_diff_cape_jkg": 0.0
+  },
+  {
+    "model": "graphcast",
+    "status": "ok",
+    "plugin_ecape_jkg": 49.52682009736259,
+    "direct_ecape_jkg": 49.52682009736259,
+    "abs_diff_ecape_jkg": 0.0,
+    "plugin_ncape_jkg": 488.01722876282287,
+    "direct_ncape_jkg": 488.01722876282287,
+    "abs_diff_ncape_jkg": 0.0,
+    "plugin_cape_jkg": 6.892661810287021e-06,
+    "direct_cape_jkg": 6.892661810287021e-06,
+    "abs_diff_cape_jkg": 0.0
+  },
+  {
+    "model": "rrfs",
+    "status": "ok",
+    "plugin_ecape_jkg": 65.56741361747254,
+    "direct_ecape_jkg": 65.56741361747254,
+    "abs_diff_ecape_jkg": 0.0,
+    "plugin_ncape_jkg": 1307.886703998846,
+    "direct_ncape_jkg": 1307.886703998846,
+    "abs_diff_ncape_jkg": 0.0,
+    "plugin_cape_jkg": 6.7682851773793725e-06,
+    "direct_cape_jkg": 6.7682851773793725e-06,
+    "abs_diff_cape_jkg": 0.0
+  }
+]

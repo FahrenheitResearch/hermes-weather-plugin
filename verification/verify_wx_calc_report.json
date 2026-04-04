@@ -1,0 +1,52 @@
+[
+  {
+    "function": "dewpoint_from_relative_humidity",
+    "plugin": {
+      "function": "dewpoint_from_relative_humidity",
+      "result": 22.667952725023728,
+      "units": "degree_Celsius"
+    },
+    "direct": {
+      "value": 22.667952725023728,
+      "units": "degree_Celsius"
+    }
+  },
+  {
+    "function": "wind_speed",
+    "plugin": {
+      "function": "wind_speed",
+      "result": 18.027756377319946,
+      "units": "meter / second"
+    },
+    "direct": {
+      "value": 18.027756377319946,
+      "units": "meter / second"
+    }
+  },
+  {
+    "function": "lcl",
+    "plugin": {
+      "function": "lcl",
+      "results": [
+        {
+          "value": 869.9574157474974,
+          "units": "hectopascal"
+        },
+        {
+          "value": 18.57080552,
+          "units": "degree_Celsius"
+        }
+      ]
+    },
+    "direct": [
+      {
+        "value": 869.9574157474974,
+        "units": "hectopascal"
+      },
+      {
+        "value": 18.57080552,
+        "units": "degree_Celsius"
+      }
+    ]
+  }
+]

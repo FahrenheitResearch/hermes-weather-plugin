@@ -1,13 +1,15 @@
-"""Tool schemas — what the LLM sees when deciding which weather tool to call."""
+﻿from .model_support import IMAGE_MODELS, PROFILE_MODELS
+
+"""Tool schemas â€” what the LLM sees when deciding which weather tool to call."""
 
 # =============================================================================
-# Tier 1 — Data (Python, NWS API direct)
+# Tier 1 â€” Data (Python, NWS API direct)
 # =============================================================================
 
 WX_CONDITIONS = {
     "name": "wx_conditions",
     "description": (
-        "Current weather conditions for a location — latest observation with "
+        "Current weather conditions for a location â€” latest observation with "
         "temperature, wind, visibility, sky cover, dewpoint, and pressure. "
         "Use this as the default for 'how's the weather' questions."
     ),
@@ -76,7 +78,7 @@ WX_METAR = {
 WX_BRIEF = {
     "name": "wx_brief",
     "description": (
-        "Quick weather briefing — conditions + 3-period forecast + alert count "
+        "Quick weather briefing â€” conditions + 3-period forecast + alert count "
         "in one call. Use for fast overviews."
     ),
     "parameters": {
@@ -92,7 +94,7 @@ WX_BRIEF = {
 WX_GLOBAL = {
     "name": "wx_global",
     "description": (
-        "Global weather via Open-Meteo — works ANYWHERE in the world, not just US. "
+        "Global weather via Open-Meteo â€” works ANYWHERE in the world, not just US. "
         "Returns temperature, humidity, wind, precipitation. "
         "Use for international locations where NWS data is unavailable."
     ),
@@ -109,7 +111,7 @@ WX_GLOBAL = {
 WX_SEVERE = {
     "name": "wx_severe",
     "description": (
-        "SPC severe weather outlook — Day 1 categorical risk level and active watches. "
+        "SPC severe weather outlook â€” Day 1 categorical risk level and active watches. "
         "Use when someone asks about severe weather risk or SPC forecasts."
     ),
     "parameters": {
@@ -123,14 +125,14 @@ WX_SEVERE = {
 }
 
 # =============================================================================
-# Tier 2 — Visualization
+# Tier 2 â€” Visualization
 # =============================================================================
 
 WX_MODEL_IMAGE = {
     "name": "wx_model_image",
     "description": (
-        "Render a weather model field as a PNG image — HRRR (3km), GFS (global), "
-        "NAM, RAP, and 30+ more models. Shows CAPE, temperature, reflectivity, "
+        "Render a weather model field as a PNG image â€” HRRR (3km), GFS (global), "
+        "NAM, RAP, and the verified multi-model image subset. Shows CAPE, temperature, reflectivity, "
         "dewpoint, wind, helicity, and more. Provide lat/lon to zoom into a region. "
         "Supports cycle selection (e.g., 18 for 18z) and forecast hours. "
         "HRRR runs hourly (0-48h), GFS every 6h (0-384h)."
@@ -152,12 +154,9 @@ WX_MODEL_IMAGE = {
             },
             "model": {
                 "type": "string",
-                "enum": ["hrrr", "nam", "rap"],
+                "enum": IMAGE_MODELS,
                 "description": (
-                    "NWP model (default: hrrr). Verified models: "
-                    "hrrr (3km CONUS, hourly, 0-48h), "
-                    "nam (12km CONUS, 6-hourly, 0-84h), "
-                    "rap (13km CONUS, hourly, 0-51h)."
+                    "Verified rustweather-backed image model set (default: hrrr). Includes HRRR, HRRRAK, GFS, GDAS, GraphCast, RAP, NAM, GEFS, AI-GFS, NBM, and HiResW."
                 ),
             },
             "lat": {"type": "number", "description": "Center latitude for regional zoom"},
@@ -174,7 +173,7 @@ WX_MODEL_IMAGE = {
 WX_RADAR_IMAGE = {
     "name": "wx_radar_image",
     "description": (
-        "Render NEXRAD radar as a PNG — high-resolution Level 2 data with "
+        "Render NEXRAD radar as a PNG â€” high-resolution Level 2 data with "
         "bilinear interpolation. Shows reflectivity, velocity, or dual-pol products. "
         "Default: 1024px, 200km range, 10dBZ noise filter. "
         "Specify a NEXRAD site (e.g., KTLX) or lat/lon to find nearest."
@@ -200,7 +199,7 @@ WX_RADAR_IMAGE = {
 WX_STORM_IMAGE = {
     "name": "wx_storm_image",
     "description": (
-        "Render radar with storm cell analysis — shows reflectivity with "
+        "Render radar with storm cell analysis â€” shows reflectivity with "
         "identified cells and rotation markers. Use during active severe weather."
     ),
     "parameters": {
@@ -213,13 +212,13 @@ WX_STORM_IMAGE = {
 }
 
 # =============================================================================
-# Tier 3 — Calculations
+# Tier 3 â€” Calculations
 # =============================================================================
 
 WX_CALC = {
     "name": "wx_calc",
     "description": (
-        "Perform a verified meteorological calculation using metrust — "
+        "Perform a verified meteorological calculation using metrust â€” "
         "205 Rust-backed functions verified against MetPy. "
         "Supports thermodynamics (dewpoint, LCL, CAPE, wet bulb), "
         "kinematics (shear, vorticity, helicity), "
@@ -256,7 +255,7 @@ WX_CALC = {
 WX_SOUNDING = {
     "name": "wx_sounding",
     "description": (
-        "Get model-derived atmospheric sounding at a point — downloads HRRR "
+        "Get model-derived atmospheric sounding at a point â€” downloads HRRR "
         "pressure-level data and computes convective parameters."
     ),
     "parameters": {
@@ -266,8 +265,8 @@ WX_SOUNDING = {
             "lon": {"type": "number", "description": "Longitude"},
             "model": {
                 "type": "string",
-                "enum": ["hrrr", "rap", "gfs", "nam"],
-                "description": "Model source (default: hrrr)",
+                "enum": PROFILE_MODELS,
+                "description": "Profile-capable model source (default: hrrr)",
             },
         },
         "required": ["lat", "lon"],
@@ -289,8 +288,8 @@ WX_ECAPE = {
             "lon": {"type": "number", "description": "Longitude"},
             "model": {
                 "type": "string",
-                "enum": ["hrrr", "rap", "gfs", "nam"],
-                "description": "Model source (default: hrrr)",
+                "enum": PROFILE_MODELS,
+                "description": "Profile-capable model source (default: hrrr)",
             },
             "cape_type": {
                 "type": "string",
@@ -329,3 +328,4 @@ ALL_SCHEMAS = [
     WX_MODEL_IMAGE, WX_RADAR_IMAGE, WX_STORM_IMAGE,
     WX_CALC, WX_SOUNDING, WX_ECAPE,
 ]
+

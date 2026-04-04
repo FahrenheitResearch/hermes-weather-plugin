@@ -1,0 +1,40 @@
+{
+  "image_models": {},
+  "profile_models": {
+    "hrrr": {
+      "status": "ok",
+      "elapsed_ms": 9846.167400013655,
+      "levels": 40,
+      "cycle": "2026-04-04 18:00:00",
+      "product": "prs"
+    },
+    "hrrrak": {
+      "status": "ok",
+      "elapsed_ms": 4423.329000012018,
+      "levels": 40,
+      "cycle": "2026-04-04 18:00:00",
+      "product": "prs"
+    },
+    "gfs": {
+      "status": "ok",
+      "elapsed_ms": 8460.246100090444,
+      "levels": 41,
+      "cycle": "2026-04-04 12:00:00",
+      "product": "pgrb2.0p25"
+    },
+    "graphcast": {
+      "status": "ok",
+      "elapsed_ms": 4790.268299984746,
+      "levels": 13,
+      "cycle": "2026-04-04 06:00:00",
+      "product": "pgrb2.0p25"
+    },
+    "rrfs": {
+      "status": "ok",
+      "elapsed_ms": 207211.36369998567,
+      "levels": 45,
+      "cycle": "2026-04-04 18:00:00",
+      "product": "prslev"
+    }
+  }
+}

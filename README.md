@@ -1,6 +1,6 @@
 # Hermes Weather Plugin
 
-Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent). 13 tools covering current conditions, forecasts, alerts, model imagery, radar, and meteorological calculations.
+Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent). 13 tools covering current conditions, forecasts, alerts, model imagery, radar, and meteorological calculations across an expanded backend model set.
 
 Data tools call NWS/SPC/METAR APIs directly in Python. All image rendering happens in Rust -- no matplotlib in the rendering path.
 
@@ -20,7 +20,7 @@ Data tools call NWS/SPC/METAR APIs directly in Python. All image rendering happe
 ### Images (Rust)
 | Tool | What it returns |
 |------|-----------------|
-| `wx_model_image` | NWP field rendered as PNG -- 22+ products, 3 models, batch support |
+| `wx_model_image` | NWP field rendered as PNG -- 22+ products, 11 verified models, batch support |
 | `wx_radar_image` | NEXRAD Level 2 reflectivity PPI (1024px, 200km range, 10 dBZ noise floor, dark background) |
 | `wx_storm_image` | Radar with storm cell analysis overlaid |
 
@@ -45,17 +45,19 @@ Comma-separated batch: `"cape,srh,uh,stp"` renders 4 images in one tool call.
 
 Average render time: 177ms per image.
 
-## Supported Models
+## Model Support
 
-| Model | Resolution | Frequency | Forecast Range |
-|-------|-----------|-----------|----------------|
-| HRRR | 3 km | Hourly | 0-48h |
-| NAM | 12 km | 6-hourly | 0-84h |
-| RAP | 13 km | Hourly | 0-51h |
+- `wx_model_image`: verified surface/image subset
+  - `aigfs`, `gdas`, `gefs`, `gfs`, `graphcast`, `hiresw`, `hrrr`, `hrrrak`, `nam`, `nbm`, `rap`
+- `wx_sounding`: verified profile subset
+  - `gfs`, `graphcast`, `hrrr`, `hrrrak`, `rrfs`
+- `wx_ecape`: uses the same verified profile subset as `wx_sounding`
+
+Models outside those sets may exist in the backend stack, but they are not exposed in Hermes until the extraction path is verified against the actual tool behavior.
 
 ## Sounding Parameters
 
-`wx_sounding` downloads pressure-level data and computes:
+`wx_sounding` downloads model pressure-level data from the verified profile subset and computes:
 
 - **CAPE/CIN**: Surface-based, mixed-layer, most-unstable
 - **Levels**: LCL (pressure, temperature, height AGL), LFC, EL

@@ -1,0 +1,57 @@
+[
+  {
+    "model": "hrrr",
+    "status": "ok",
+    "plugin_sbcape_jkg": 0.0,
+    "direct_sbcape_jkg": 0.0,
+    "abs_diff_sbcape_jkg": 0.0,
+    "plugin_mucape_jkg": 0.0,
+    "direct_mucape_jkg": 0.0,
+    "abs_diff_mucape_jkg": 0.0,
+    "levels_available": 40
+  },
+  {
+    "model": "hrrrak",
+    "status": "ok",
+    "plugin_sbcape_jkg": 12.0,
+    "direct_sbcape_jkg": 11.986821837537159,
+    "abs_diff_sbcape_jkg": 0.013178162462841314,
+    "plugin_mucape_jkg": 0.0,
+    "direct_mucape_jkg": 0.0,
+    "abs_diff_mucape_jkg": 0.0,
+    "levels_available": 40
+  },
+  {
+    "model": "gfs",
+    "status": "ok",
+    "plugin_sbcape_jkg": 0.0,
+    "direct_sbcape_jkg": 0.0,
+    "abs_diff_sbcape_jkg": 0.0,
+    "plugin_mucape_jkg": 0.0,
+    "direct_mucape_jkg": 0.0,
+    "abs_diff_mucape_jkg": 0.0,
+    "levels_available": 41
+  },
+  {
+    "model": "graphcast",
+    "status": "ok",
+    "plugin_sbcape_jkg": 0.0,
+    "direct_sbcape_jkg": 0.0,
+    "abs_diff_sbcape_jkg": 0.0,
+    "plugin_mucape_jkg": 0.0,
+    "direct_mucape_jkg": 0.0,
+    "abs_diff_mucape_jkg": 0.0,
+    "levels_available": 13
+  },
+  {
+    "model": "rrfs",
+    "status": "ok",
+    "plugin_sbcape_jkg": 0.0,
+    "direct_sbcape_jkg": 0.0,
+    "abs_diff_sbcape_jkg": 0.0,
+    "plugin_mucape_jkg": 0.0,
+    "direct_mucape_jkg": 0.0,
+    "abs_diff_mucape_jkg": 0.0,
+    "levels_available": 45
+  }
+]
