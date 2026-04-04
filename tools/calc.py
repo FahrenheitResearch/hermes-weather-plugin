@@ -2,8 +2,120 @@
 
 import json
 import logging
+import os
+import subprocess
+import sys
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
+def _find_ecape_runner() -> str | None:
+    env_path = os.environ.get("ECAPE_RS_RUNNER")
+    if env_path:
+        p = Path(env_path)
+        return str(p) if p.exists() else None
+
+    exe_name = "run_case.exe" if sys.platform.startswith("win") else "run_case"
+    candidates = [
+        Path.home() / "ecape-rs" / "target" / "release" / exe_name,
+        Path.home() / "ecape-rs" / "target" / "debug" / exe_name,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return str(candidate)
+    return None
+
+
+def _load_model_profile(args: dict):
+    from rusbie import HerbieLatest
+    import numpy as np
+
+    lat, lon = args.get("lat"), args.get("lon")
+    if lat is None or lon is None:
+        raise ValueError("lat and lon are required")
+
+    model = args.get("model", "hrrr")
+    product = "prs" if model in ("hrrr", "rap") else None
+    H = HerbieLatest(model=model, fxx=0, n=1, product=product)
+    cycle = str(H.date)
+
+    ds_tmp = H.xarray(":TMP:.*mb:", verbose=False)
+    ds_dpt = H.xarray(":DPT:.*mb:", verbose=False)
+    ds_u = H.xarray(":UGRD:.*mb:", verbose=False)
+    ds_v = H.xarray(":VGRD:.*mb:", verbose=False)
+    ds_hgt = H.xarray(":HGT:.*mb:", verbose=False)
+
+    def _nearest(ds, lat, lon):
+        lat_arr = ds.latitude.values
+        lon_arr = ds.longitude.values
+        if lat_arr.ndim == 1:
+            j = np.argmin(np.abs(lat_arr - lat))
+            i = np.argmin(np.abs(lon_arr - lon))
+            vname = list(ds.data_vars)[0]
+            vals = ds[vname].values
+            while vals.ndim > 1:
+                if vals.shape[-2] > 1 and vals.shape[-1] > 1:
+                    return vals[:, j, i] if vals.ndim == 3 else vals[j, i]
+                vals = vals.squeeze()
+            return vals
+        lon_g = lon_arr
+        if lon_g.max() > 180:
+            lon_g = np.where(lon_g > 180, lon_g - 360, lon_g)
+        dist = (lat_arr - lat) ** 2 + (lon_g - lon) ** 2
+        j, i = np.unravel_index(dist.argmin(), dist.shape)
+        vname = list(ds.data_vars)[0]
+        vals = ds[vname].values
+        if vals.ndim == 3:
+            return vals[:, j, i]
+        if vals.ndim == 2:
+            return vals[j, i]
+        return vals
+
+    pres_coord = None
+    pres_scale = 1.0
+    for coord in ds_tmp.coords:
+        vals = ds_tmp[coord].values
+        if vals.ndim == 1 and len(vals) > 3:
+            if 100 < vals.max() < 1100:
+                pres_coord = coord
+                pres_scale = 1.0
+                break
+            if vals.max() > 50000:
+                pres_coord = coord
+                pres_scale = 0.01
+                break
+
+    if pres_coord is None:
+        raise ValueError("Could not identify pressure levels")
+
+    pressure = ds_tmp[pres_coord].values * pres_scale
+    temp_k = _nearest(ds_tmp, lat, lon)
+    dewp_k = _nearest(ds_dpt, lat, lon)
+    u_ms = _nearest(ds_u, lat, lon)
+    v_ms = _nearest(ds_v, lat, lon)
+    hgt_m = _nearest(ds_hgt, lat, lon)
+
+    sort_idx = np.argsort(pressure)[::-1]
+    pressure = pressure[sort_idx]
+    temp_k = temp_k[sort_idx]
+    dewp_k = dewp_k[sort_idx]
+    u_ms = u_ms[sort_idx]
+    v_ms = v_ms[sort_idx]
+    hgt_m = hgt_m[sort_idx]
+
+    return {
+        "lat": lat,
+        "lon": lon,
+        "model": model,
+        "cycle": cycle,
+        "pressure_hpa": pressure.tolist(),
+        "height_m": hgt_m.tolist(),
+        "temperature_k": temp_k.tolist(),
+        "dewpoint_k": dewp_k.tolist(),
+        "u_ms": u_ms.tolist(),
+        "v_ms": v_ms.tolist(),
+    }
 
 
 def wx_calc(args: dict, **kwargs) -> str:
@@ -377,3 +489,84 @@ def wx_sounding(args: dict, **kwargs) -> str:
         return json.dumps({"error": f"Missing package: {e}"})
     except Exception as e:
         return json.dumps({"error": f"sounding failed: {type(e).__name__}: {e}"})
+
+
+def wx_ecape(args: dict, **kwargs) -> str:
+    lat, lon = args.get("lat"), args.get("lon")
+    if lat is None or lon is None:
+        return json.dumps({"error": "lat and lon are required"})
+
+    runner = _find_ecape_runner()
+    if not runner:
+        return json.dumps({
+            "error": "ecape-rs runner not found",
+            "hint": "Build ecape-rs and set ECAPE_RS_RUNNER to the run_case binary if it is not in ~/ecape-rs/target/release/",
+        })
+
+    try:
+        profile_data = _load_model_profile(args)
+        include_profile = bool(args.get("include_parcel_profile", False))
+        payload = {
+            "pressure_hpa": profile_data["pressure_hpa"],
+            "height_m": profile_data["height_m"],
+            "temperature_k": profile_data["temperature_k"],
+            "dewpoint_k": profile_data["dewpoint_k"],
+            "u_wind_ms": profile_data["u_ms"],
+            "v_wind_ms": profile_data["v_ms"],
+            "options": {
+                "cape_type": args.get("cape_type", "most_unstable"),
+                "storm_motion_type": args.get("storm_motion_type", "right_moving"),
+                "storm_motion_u_ms": args.get("storm_motion_u_ms"),
+                "storm_motion_v_ms": args.get("storm_motion_v_ms"),
+                "pseudoadiabatic": args.get("pseudoadiabatic", True),
+            },
+            "reps": 1,
+        }
+        proc = subprocess.run(
+            [runner],
+            input=json.dumps(payload),
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        out = json.loads(proc.stdout)
+        result = {
+            "location": {"lat": lat, "lon": lon},
+            "model": profile_data["model"],
+            "cycle": profile_data["cycle"],
+            "mode": {
+                "cape_type": payload["options"]["cape_type"],
+                "storm_motion_type": payload["options"]["storm_motion_type"],
+                "pseudoadiabatic": payload["options"]["pseudoadiabatic"],
+            },
+            "metrics": {
+                "ecape_jkg": out["ecape_jkg"],
+                "ncape_jkg": out["ncape_jkg"],
+                "cape_jkg": out["cape_jkg"],
+                "cin_jkg": out["cin_jkg"],
+                "lfc_m": out["lfc_m"],
+                "el_m": out["el_m"],
+                "storm_motion_u_ms": out["storm_motion_u_ms"],
+                "storm_motion_v_ms": out["storm_motion_v_ms"],
+            },
+            "runner": {
+                "path": runner,
+                "per_call_ms": out["per_call_ms"],
+            },
+        }
+        if include_profile:
+            result["parcel_profile"] = {
+                "pressure_pa": out["parcel_pressure_pa"],
+                "height_m": out["parcel_height_m"],
+                "temperature_k": out["parcel_temperature_k"],
+                "qv_kgkg": out["parcel_qv_kgkg"],
+                "qt_kgkg": out["parcel_qt_kgkg"],
+            }
+        return json.dumps(result)
+    except subprocess.CalledProcessError as e:
+        return json.dumps({
+            "error": "ecape-rs runner failed",
+            "stderr": e.stderr.strip(),
+        })
+    except Exception as e:
+        return json.dumps({"error": f"ecape failed: {type(e).__name__}: {e}"})

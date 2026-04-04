@@ -36,7 +36,7 @@ def _install_skill():
 
 
 def register(ctx):
-    """Register all 12 weather tools."""
+    """Register all weather tools."""
 
     schema_map = {s["name"]: s for s in schemas.ALL_SCHEMAS}
 
@@ -82,7 +82,11 @@ def register(ctx):
         name="wx_sounding", toolset="weather",
         schema=schema_map["wx_sounding"], handler=calc.wx_sounding,
     )
+    ctx.register_tool(
+        name="wx_ecape", toolset="weather",
+        schema=schema_map["wx_ecape"], handler=calc.wx_ecape,
+    )
 
     _install_skill()
 
-    logger.info("Weather plugin v2 loaded: 12 tools (data: 7, images: 3, calc: 2)")
+    logger.info("Weather plugin v2 loaded: 13 tools (data: 7, images: 3, calc: 3)")

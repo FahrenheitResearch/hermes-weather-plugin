@@ -1,6 +1,6 @@
 # Hermes Weather Plugin
 
-Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent). 12 tools covering current conditions, forecasts, alerts, model imagery, radar, and meteorological calculations.
+Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent). 13 tools covering current conditions, forecasts, alerts, model imagery, radar, and meteorological calculations.
 
 Data tools call NWS/SPC/METAR APIs directly in Python. All image rendering happens in Rust -- no matplotlib in the rendering path.
 
@@ -29,6 +29,7 @@ Data tools call NWS/SPC/METAR APIs directly in Python. All image rendering happe
 |------|-----------------|
 | `wx_calc` | Any of 205 meteorological functions (dewpoint, CAPE, LCL, wind chill, etc.) |
 | `wx_sounding` | Model sounding at a point -- 40 pressure levels + all derived parameters |
+| `wx_ecape` | ECAPE, NCAPE, CAPE, CIN, LFC, EL, storm motion, and optional parcel path from a model sounding |
 
 ## Model Images
 
@@ -65,6 +66,14 @@ Average render time: 177ms per image.
 - **Moisture**: Precipitable water, freezing level
 - **Lapse rates**: 0-3km, 700-500mb
 - **Profile**: Standard levels (1000, 925, 850, 700, 500, 300, 250 mb) with T, Td, wind
+
+## ECAPE
+
+`wx_ecape` downloads the same model sounding profile and runs the parity-verified `ecape-rs` runner.
+
+- Defaults: `cape_type=most_unstable`, `storm_motion_type=right_moving`, `pseudoadiabatic=true`
+- Returns: `ECAPE`, `NCAPE`, `CAPE`, `CIN`, `LFC`, `EL`, storm-motion `u/v`
+- Optional: `include_parcel_profile=true` to return the full aligned parcel path arrays
 
 ## Stack
 
@@ -110,11 +119,18 @@ pip install -e /path/to/wrf-rust
 cd /path/to/rustdar
 cargo build --release --bin radar-render
 
+# Build ECAPE runner
+cd /path/to/ecape-rs
+cargo build --release --bin run_case
+
 # Copy plugin to Hermes
 cp -r weather ~/.hermes/plugins/
 
 # (Optional) Set radar binary path if not at ~/rustdar/
 export RADAR_RENDER_PATH=/path/to/radar-render
+
+# (Optional) Set ECAPE runner path if not at ~/ecape-rs/target/release/
+export ECAPE_RS_RUNNER=/path/to/run_case
 ```
 
 ## Timings
@@ -133,7 +149,7 @@ export RADAR_RENDER_PATH=/path/to/radar-render
 ```
 ~/.hermes/plugins/weather/
 ├── plugin.yaml          # Hermes plugin manifest
-├── __init__.py          # register(ctx) — wires 12 tools
+├── __init__.py          # register(ctx) — wires 13 tools
 ├── schemas.py           # Tool schemas (what the LLM sees)
 ├── nws.py               # NWS/METAR/SPC/Open-Meteo API client
 ├── skill.md             # Usage guide for the LLM
@@ -141,7 +157,7 @@ export RADAR_RENDER_PATH=/path/to/radar-render
 │   ├── __init__.py
 │   ├── data.py          # NWS API handlers
 │   ├── images.py        # Rust renderer + radar handlers
-│   └── calc.py          # metrust calculations + sounding
+│   └── calc.py          # metrust calculations + sounding + ecape-rs bridge
 └── README.md
 ```
 

@@ -274,9 +274,58 @@ WX_SOUNDING = {
     },
 }
 
+
+WX_ECAPE = {
+    "name": "wx_ecape",
+    "description": (
+        "Compute ECAPE, NCAPE, CAPE, CIN, LFC, EL, storm motion, and optional "
+        "parcel-path arrays from a model-derived sounding at a point. Uses the "
+        "parity-verified ecape-rs runner."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "lat": {"type": "number", "description": "Latitude"},
+            "lon": {"type": "number", "description": "Longitude"},
+            "model": {
+                "type": "string",
+                "enum": ["hrrr", "rap", "gfs", "nam"],
+                "description": "Model source (default: hrrr)",
+            },
+            "cape_type": {
+                "type": "string",
+                "enum": ["surface_based", "most_unstable", "mixed_layer", "user_defined"],
+                "description": "Parcel source for ECAPE calculations (default: most_unstable)",
+            },
+            "pseudoadiabatic": {
+                "type": "boolean",
+                "description": "If true, use pseudoadiabatic parcel behavior; if false, use irreversible behavior (default: true)",
+            },
+            "storm_motion_type": {
+                "type": "string",
+                "enum": ["right_moving", "left_moving", "mean_wind", "user_defined"],
+                "description": "Storm-motion method (default: right_moving)",
+            },
+            "storm_motion_u_ms": {
+                "type": "number",
+                "description": "Custom storm-motion u component in m/s; use with storm_motion_v_ms",
+            },
+            "storm_motion_v_ms": {
+                "type": "number",
+                "description": "Custom storm-motion v component in m/s; use with storm_motion_u_ms",
+            },
+            "include_parcel_profile": {
+                "type": "boolean",
+                "description": "If true, include the full aligned ECAPE parcel path arrays",
+            },
+        },
+        "required": ["lat", "lon"],
+    },
+}
+
 ALL_SCHEMAS = [
     WX_CONDITIONS, WX_FORECAST, WX_ALERTS, WX_METAR, WX_BRIEF,
     WX_GLOBAL, WX_SEVERE,
     WX_MODEL_IMAGE, WX_RADAR_IMAGE, WX_STORM_IMAGE,
-    WX_CALC, WX_SOUNDING,
+    WX_CALC, WX_SOUNDING, WX_ECAPE,
 ]
