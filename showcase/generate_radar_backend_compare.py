@@ -19,7 +19,7 @@ RUSTDAR = Path.home() / "rustdar" / "target" / "release" / ("radar-render.exe" i
 NEXRAD = ROOT.parent / "radar_backends" / "nexrad-render-cli" / "target" / "release" / ("nexrad-render-cli.exe" if os.name == "nt" else "nexrad-render-cli")
 
 AWS_BASE = "https://unidata-nexrad-level2.s3.amazonaws.com"
-SITE = "KTLX"
+SITE = os.environ.get("RADAR_COMPARE_SITE", "KDTX").strip().upper()
 
 
 def reset_output():
