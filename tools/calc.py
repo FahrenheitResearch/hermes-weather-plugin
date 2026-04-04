@@ -1,4 +1,4 @@
-﻿"""Tier 3 â€” Calculation tool handlers. metrust-py in-process, Rust-backed."""
+"""Tier 3 — Calculation tool handlers. metrust-py in-process, Rust-backed."""
 
 import json
 import logging
@@ -7,26 +7,15 @@ import subprocess
 import sys
 from pathlib import Path
 
+from .. import bootstrap
 from ..model_support import PROFILE_MODELS, guess_profile_moisture, guess_profile_product
 
 logger = logging.getLogger(__name__)
 
 
 def _find_ecape_runner() -> str | None:
-    env_path = os.environ.get("ECAPE_RS_RUNNER")
-    if env_path:
-        p = Path(env_path)
-        return str(p) if p.exists() else None
-
-    exe_name = "run_case.exe" if sys.platform.startswith("win") else "run_case"
-    candidates = [
-        Path.home() / "ecape-rs" / "target" / "release" / exe_name,
-        Path.home() / "ecape-rs" / "target" / "debug" / exe_name,
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return str(candidate)
-    return None
+    runner, _ = bootstrap.ensure_ecape_runner()
+    return runner
 
 
 def _load_model_profile(args: dict):
@@ -432,7 +421,7 @@ def wx_ecape(args: dict, **kwargs) -> str:
     if not runner:
         return json.dumps({
             "error": "ecape-rs runner not found",
-            "hint": "Build ecape-rs and set ECAPE_RS_RUNNER to the run_case binary if it is not in ~/ecape-rs/target/release/",
+            "hint": "Install a Rust toolchain for automatic first-use builds or set ECAPE_RS_RUNNER to an existing run_case binary.",
         })
 
     try:
@@ -502,4 +491,6 @@ def wx_ecape(args: dict, **kwargs) -> str:
         })
     except Exception as e:
         return json.dumps({"error": f"ecape failed: {type(e).__name__}: {e}"})
+
+
 

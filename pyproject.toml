@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-weather-plugin"
+version = "2.1.0"
+description = "Hermes Agent weather plugin with model imagery, radar, soundings, and ECAPE"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Fahrenheit Research" }]
+dependencies = [
+  "requests>=2.31",
+  "numpy>=1.26",
+  "metrust",
+  "cfrust @ git+https://github.com/FahrenheitResearch/cfrust.git",
+  "rusbie @ git+https://github.com/FahrenheitResearch/rusbie.git",
+  "wrf-rust @ git+https://github.com/FahrenheitResearch/wrf-rust.git",
+]
+
+[project.entry-points."hermes_agent.plugins"]
+weather = "hermes_weather_plugin"
+
+[tool.setuptools]
+packages = ["hermes_weather_plugin", "hermes_weather_plugin.tools"]
+include-package-data = true
+
+[tool.setuptools.package-dir]
+hermes_weather_plugin = "."
+
+[tool.setuptools.package-data]
+hermes_weather_plugin = [
+  "plugin.yaml",
+  "skill.md",
+  "radar_backends/nexrad-render-cli/Cargo.toml",
+  "radar_backends/nexrad-render-cli/Cargo.lock",
+  "radar_backends/nexrad-render-cli/src/main.rs",
+]

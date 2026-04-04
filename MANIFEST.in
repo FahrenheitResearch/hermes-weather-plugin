@@ -1,0 +1,4 @@
+include README.md
+include plugin.yaml
+include skill.md
+recursive-include radar_backends/nexrad-render-cli *.toml *.rs

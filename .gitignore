@@ -5,3 +5,6 @@ __pycache__/
 bench_all.py
 showcase/radar-backends/latest/
 radar_backends/*/target/
+dist/
+build/
+*.egg-info/

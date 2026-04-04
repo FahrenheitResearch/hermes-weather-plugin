@@ -1,8 +1,19 @@
 name: weather
-version: 2.0.0
+version: 2.1.0
 description: >
   Weather data, radar/model imagery, and verified meteorological calculations.
-  Built on metrust, cfrust, rusbie, rustweather, and rustdar — zero legacy dependencies.
-provides:
-  tools: true
-  hooks: false
+  Built on metrust, rusbie, wrf-rust, rustdar, and ecape-rs.
+provides_tools:
+  - wx_conditions
+  - wx_forecast
+  - wx_alerts
+  - wx_metar
+  - wx_brief
+  - wx_global
+  - wx_severe
+  - wx_model_image
+  - wx_radar_image
+  - wx_storm_image
+  - wx_calc
+  - wx_sounding
+  - wx_ecape

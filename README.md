@@ -1,186 +1,186 @@
-﻿# Hermes Weather Plugin
+# Hermes Weather Plugin
 
-Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent). 13 tools covering current conditions, forecasts, alerts, model imagery, radar, and meteorological calculations across an expanded backend model set.
+Weather plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent).
 
-Data tools call NWS/SPC/METAR APIs directly in Python. All image rendering happens in Rust -- no matplotlib in the rendering path.
+It provides 13 tools for observations, forecasts, alerts, model imagery, radar, soundings, calculations, and ECAPE. The plugin is packaged for Hermes plugin autodiscovery and bootstraps its Rust backends on first use instead of requiring users to clone and build multiple repos by hand.
 
-## Tools
+## Install
 
-### Data (Python)
-| Tool | What it returns |
-|------|-----------------|
-| `wx_conditions` | Current obs: temperature, wind, sky, dewpoint |
-| `wx_forecast` | NWS 7-day or hourly forecast |
-| `wx_alerts` | Active warnings, watches, advisories |
-| `wx_metar` | Raw/decoded METAR for any ICAO station |
-| `wx_brief` | Conditions + forecast + alert count in one call |
-| `wx_global` | Non-US locations via Open-Meteo |
-| `wx_severe` | SPC Day 1 categorical outlook + active watches |
+```bash`r`npip install git+https://github.com/FahrenheitResearch/hermes-weather-plugin.git`r`n```
 
-### Images (Rust)
-| Tool | What it returns |
-|------|-----------------|
-| `wx_model_image` | NWP field rendered as PNG -- 22+ products, 11 verified models, batch support |
-| `wx_radar_image` | NEXRAD Level 2 radar image through the current radar backend (default rustdar) |
-| `wx_storm_image` | Reflectivity image with storm-analysis overlays plus detection metadata |
-
-### Calculations (Rust via PyO3)
-| Tool | What it returns |
-|------|-----------------|
-| `wx_calc` | Any of 205 meteorological functions (dewpoint, CAPE, LCL, wind chill, etc.) |
-| `wx_sounding` | Model sounding at a point -- 40 pressure levels + all derived parameters |
-| `wx_ecape` | ECAPE, NCAPE, CAPE, CIN, LFC, EL, storm motion, and optional parcel path from a model sounding |
-
-## Model Images
-
-22+ fields rendered with color tables from Solarpower07. Lambert Conformal projection, state/country borders, colorbars.
-
-**Instability**: CAPE (surface, mixed-layer, most-unstable, 0-3km), CIN
-**Shear/Helicity**: SRH 0-1km, SRH 0-3km, updraft helicity, 0-6km bulk shear, 0-1km bulk shear
-**Surface**: Temperature, dewpoint, RH, wind gust, cloud cover, precipitation, visibility
-**Composites**: STP, SCP, EHI
-**Reflectivity**: Composite reflectivity (27-color discrete palette)
-
-Comma-separated batch: `"cape,srh,uh,stp"` renders 4 images in one tool call.
-
-Average render time: 177ms per image.
-
-## Model Support
-
-- `wx_model_image`: verified surface/image subset
-  - `aigfs`, `gdas`, `gefs`, `gfs`, `graphcast`, `hiresw`, `hrrr`, `hrrrak`, `nam`, `nbm`, `rap`
-- `wx_sounding`: verified profile subset
-  - `gdas`, `gfs`, `graphcast`, `hrrr`, `hrrrak`, `rrfs`
-- `wx_ecape`: uses the same verified profile subset as `wx_sounding`
-
-Models outside those sets may exist in the backend stack, but they are not exposed in Hermes until the extraction path is verified against the actual tool behavior.
-
-## Sounding Parameters
-
-`wx_sounding` downloads model pressure-level data from the verified profile subset and computes:
-
-- **CAPE/CIN**: Surface-based, mixed-layer, most-unstable
-- **Levels**: LCL (pressure, temperature, height AGL), LFC, EL
-- **Indices**: Lifted Index, K-Index, Total Totals
-- **Shear**: 0-1km and 0-6km bulk shear, SRH 0-1km and 0-3km
-- **Storm motion**: Bunkers right-mover
-- **Composites**: STP (fixed-layer)
-- **Moisture**: Precipitable water, freezing level
-- **Lapse rates**: 0-3km, 700-500mb
-- **Profile**: Standard levels (1000, 925, 850, 700, 500, 300, 250 mb) with T, Td, wind
-
-## ECAPE
-
-`wx_ecape` downloads the same model sounding profile and runs the parity-verified `ecape-rs` runner.
-
-- Defaults: `cape_type=most_unstable`, `storm_motion_type=right_moving`, `pseudoadiabatic=true`
-- Returns: `ECAPE`, `NCAPE`, `CAPE`, `CIN`, `LFC`, `EL`, storm-motion `u/v`
-- Optional: `include_parcel_profile=true` to return the full aligned parcel path arrays
-- Supported storm motion modes:
-- `right_moving` = Bunkers right mover
-- `left_moving` = Bunkers left mover
-- `mean_wind` = Bunkers mean wind
-- `user_defined` = explicit `storm_motion_u_ms` / `storm_motion_v_ms`
-
-## Stack
-
-```
-Plugin (Python)
-  â”œâ”€â”€ Data: requests â†’ NWS / SPC / METAR / Open-Meteo APIs
-  â”œâ”€â”€ Model images: rusbie â†’ cfrust â†’ wrf-render
-  â”‚                  (download)  (decode)  (rasterize)
-  â”œâ”€â”€ Radar: radar-render binary (rustdar)
-  â””â”€â”€ Calculations: metrust-py (205 functions, PyO3 â†’ Rust)
-```
-
-No eccodes, no Fortran, no C libraries in the Rust components. The only system dependency is a working Python environment.
-
-## Python Packages
-
-```
-metrust      â€” 205 meteorological calculations (PyO3 â†’ Rust)
-cfrust       â€” GRIB2 decoder (pure Rust, replaces cfgrib/eccodes)
-rusbie       â€” NWP downloader with byte-range .idx filtering
-rustweather  â€” Plotting wrapper
-rustplots    â€” MetPy-compatible plotting
-wrf-rust     â€” Solarpower07 color tables + rasterizer
-```
-
-## Rust Binary
-
-```
-radar-render â€” NEXRAD Level 2 download + parse + render (from rustdar)
-```
-
-## Setup
+Then start Hermes normally:
 
 ```bash
-# Install Python packages
-pip install metrust cfrust rusbie rustweather
+hermes
+```
 
-# Install from source (not yet on PyPI)
-pip install -e /path/to/rustplots
-pip install -e /path/to/wrf-rust
+Hermes should auto-discover the plugin through the Python entry point.
 
-# Build radar binary
-cd /path/to/rustdar
-cargo build --release --bin radar-render
+## Runtime model
 
-# Build ECAPE runner
-cd /path/to/ecape-rs
-cargo build --release --bin run_case
+The plugin is Python-first, but several heavy paths use Rust binaries or Rust-backed Python packages.
 
-# Copy plugin to Hermes
-cp -r weather ~/.hermes/plugins/
+- Data tools call NWS, SPC, METAR, and Open-Meteo directly from Python.
+- `wx_model_image` uses `rusbie` for model access and `wrf-rust` for rendering.
+- `wx_radar_image` and `wx_storm_image` use a radar backend binary.
+- `wx_ecape` uses the `ecape-rs` runner.
+- `wx_calc` and `wx_sounding` use `metrust` in-process.
 
-## Radar
+If a required Rust binary is missing, the plugin will try to build it on first use into:
 
-Hermes keeps a stable radar tool contract and routes it through the configured radar backend. The default backend is `rustdar` via the `radar-render` CLI.
+- `~/.hermes/weather/bin`
 
-Supported radar products:
-- `ref`, `vel`, `sw`, `zdr`, `rho`, `phi`: available through both radar backends
-- `srv`, `vil`: currently available through the `rustdar` backend only
+and cache downloaded source/build work under:
 
-# (Optional) Select radar backend and binary path
+- `~/.hermes/weather/src`
+
+## First-use bootstrap
+
+The plugin can bootstrap these binaries automatically:
+
+- `radar-render` from `rustdar`
+- `run_case` from `ecape-rs`
+- bundled `nexrad-render-cli`
+
+This requires a working Rust toolchain (`cargo`, `rustc`) on the user machine unless they point the plugin at prebuilt binaries.
+
+If you already have binaries installed, set optional overrides:
+
+```bash
 export RADAR_BACKEND=rustdar
 export RADAR_RENDER_PATH=/path/to/radar-render
 export NEXRAD_RENDER_PATH=/path/to/nexrad-render-cli
-
-# (Optional) Set ECAPE runner path if not at ~/ecape-rs/target/release/
 export ECAPE_RS_RUNNER=/path/to/run_case
 ```
 
-## Timings
+Windows PowerShell:
 
-| Operation | Time |
-|-----------|------|
-| Model image render (Rust) | ~177ms |
-| 22 maps including download | ~18s |
-| 15 maps from cache | ~3.1s |
-| Radar image (NEXRAD L2) | ~3s (download + render) |
-| Sounding (40 levels + params) | ~15s (download-heavy) |
-| METAR lookup | ~300ms |
-
-## File Structure
-
+```powershell
+$env:RADAR_BACKEND = 'rustdar'
+$env:RADAR_RENDER_PATH = 'C:\path\to\radar-render.exe'
+$env:NEXRAD_RENDER_PATH = 'C:\path\to\nexrad-render-cli.exe'
+$env:ECAPE_RS_RUNNER = 'C:\path\to\run_case.exe'
 ```
-~/.hermes/plugins/weather/
-â”œâ”€â”€ plugin.yaml          # Hermes plugin manifest
-â”œâ”€â”€ __init__.py          # register(ctx) â€” wires 13 tools
-â”œâ”€â”€ schemas.py           # Tool schemas (what the LLM sees)
-â”œâ”€â”€ nws.py               # NWS/METAR/SPC/Open-Meteo API client
-â”œâ”€â”€ skill.md             # Usage guide for the LLM
-â”œâ”€â”€ tools/
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ data.py          # NWS API handlers
-â”‚   â”œâ”€â”€ images.py        # Rust renderer + radar handlers
-â”‚   â””â”€â”€ calc.py          # metrust calculations + sounding + ecape-rs bridge
-â””â”€â”€ README.md
+
+## Tools
+
+### Data
+
+| Tool | What it returns |
+|------|-----------------|
+| `wx_conditions` | Current observed conditions |
+| `wx_forecast` | NWS 7-day or hourly forecast |
+| `wx_alerts` | Active NWS alerts |
+| `wx_metar` | Raw and decoded METAR |
+| `wx_brief` | Conditions + short forecast + alert count |
+| `wx_global` | Global weather via Open-Meteo |
+| `wx_severe` | SPC categorical outlook + active watches |
+
+### Images
+
+| Tool | What it returns |
+|------|-----------------|
+| `wx_model_image` | Model field PNG rendered with `wrf-rust` |
+| `wx_radar_image` | NEXRAD Level 2 radar image through the configured radar backend |
+| `wx_storm_image` | Reflectivity image with storm-analysis overlays and metadata |
+
+### Calculations
+
+| Tool | What it returns |
+|------|-----------------|
+| `wx_calc` | Rust-backed meteorological calculations through `metrust` |
+| `wx_sounding` | Model sounding plus derived parameters |
+| `wx_ecape` | ECAPE, NCAPE, CAPE, CIN, LFC, EL, storm motion, optional parcel path |
+
+## Model support
+
+Verified model subsets currently exposed in Hermes:
+
+- `wx_model_image`
+  - `aigfs`, `gdas`, `gefs`, `gfs`, `graphcast`, `hiresw`, `hrrr`, `hrrrak`, `nam`, `nbm`, `rap`
+- `wx_sounding`
+  - `gdas`, `gfs`, `graphcast`, `hrrr`, `hrrrak`, `rrfs`
+- `wx_ecape`
+  - same verified profile subset as `wx_sounding`
+
+Models outside those sets may exist lower in the backend stack, but they are not exposed until their Hermes extraction path is verified.
+
+## Radar
+
+Hermes keeps a stable radar tool contract and routes it through the configured radar backend.
+
+Current backends:
+
+- `rustdar` (default)
+- `nexrad`
+
+Supported radar products:
+
+- both backends: `ref`, `vel`, `sw`, `zdr`, `rho`, `phi`
+- `rustdar` only: `srv`, `vil`
+
+## Soundings and ECAPE
+
+`wx_sounding` downloads a verified model pressure-level profile and computes:
+
+- CAPE/CIN: surface-based, mixed-layer, most-unstable
+- LCL/LFC/EL
+- LI, K-index, Total Totals
+- bulk shear and SRH
+- precipitable water, lapse rates, freezing level
+- standard pressure-level profile output
+
+`wx_ecape` runs the parity-verified `ecape-rs` runner on the same profile.
+
+Defaults:
+
+- `cape_type=most_unstable`
+- `storm_motion_type=right_moving`
+- `pseudoadiabatic=true`
+
+Supported storm-motion modes:
+
+- `right_moving`
+- `left_moving`
+- `mean_wind`
+- `user_defined`
+
+Set `include_parcel_profile=true` to return the aligned parcel path arrays.
+
+## Packaging notes
+
+This package is intended to be installed with `pip` from GitHub, not copied manually into `~/.hermes/plugins`.
+
+The package exposes the Hermes plugin entry point directly, ships `plugin.yaml`, ships the bundled `nexrad-render-cli` source, installs the bundled skill on first load, and bootstraps Rust binaries on demand.
+
+## Stack
+
+```text
+Plugin (Python)
+  |- Data: requests -> NWS / SPC / METAR / Open-Meteo APIs
+  |- Model images: rusbie -> wrf-rust
+  |- Radar: rustdar or bundled nexrad-render-cli
+  `- Calculations: metrust + ecape-rs
 ```
+
+## Dependencies
+
+Python package dependencies:
+
+- `requests`
+- `numpy`
+- `metrust`
+- `rusbie`
+- `wrf-rust`
+
+Optional system dependency for first-use binary builds:
+
+- Rust toolchain (`cargo`, `rustc`)
 
 ## Credits
 
-- **Color tables**: [Solarpower07](https://github.com/Solarpower07) -- discrete color palettes and product style definitions used for all model imagery
-- **Meteorological calculations**: metrust -- 205 functions verified against MetPy test suites
-- **Plugin platform**: [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research
+- [Solarpower07](https://github.com/Solarpower07) for model imagery color tables and product styling
+- `metrust` for Rust-backed meteorological calculations
+- `ecape-rs` for the parity-verified ECAPE runner
+- [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research
 
