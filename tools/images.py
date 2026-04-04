@@ -1,4 +1,4 @@
-"""Tier 2 — Image tool handlers. rustweather for model maps, radar-render for NEXRAD."""
+"""Tier 2 — Image tool handlers. rustweather for model maps, pluggable radar backend for NEXRAD."""
 
 import json
 import logging
@@ -11,9 +11,14 @@ logger = logging.getLogger(__name__)
 
 # radar-render binary path
 _EXE = ".exe" if os.name == "nt" else ""
+RADAR_BACKEND = os.environ.get("RADAR_BACKEND", "rustdar").strip().lower()
 RADAR_RENDER = os.environ.get(
     "RADAR_RENDER_PATH",
     str(Path.home() / "rustdar" / "target" / "release" / f"radar-render{_EXE}")
+)
+NEXRAD_RENDER = os.environ.get(
+    "NEXRAD_RENDER_PATH",
+    str(Path(__file__).resolve().parents[1] / "radar_backends" / "nexrad-render-cli" / "target" / "release" / f"nexrad-render-cli{_EXE}")
 )
 
 _IMG_DIR = Path.home() / ".hermes" / "weather" / "images"
@@ -21,7 +26,11 @@ _IMG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def check_radar_render():
-    return os.path.isfile(RADAR_RENDER)
+    if RADAR_BACKEND == "rustdar":
+        return os.path.isfile(RADAR_RENDER)
+    if RADAR_BACKEND == "nexrad":
+        return os.path.isfile(NEXRAD_RENDER)
+    return False
 
 
 def check_rustweather():
@@ -308,7 +317,7 @@ def wx_model_image(args: dict, **kwargs) -> str:
         return json.dumps({"error": f"model image failed: {type(e).__name__}: {e}"})
 
 
-def wx_radar_image(args: dict, **kwargs) -> str:
+def _run_rustdar(args: dict, *, storm_cells: bool = False) -> str:
     cmd = [RADAR_RENDER]
 
     if args.get("site"):
@@ -317,6 +326,9 @@ def wx_radar_image(args: dict, **kwargs) -> str:
         cmd.extend(["--lat", str(args["lat"]), "--lon", str(args["lon"])])
     else:
         return json.dumps({"error": "Provide site or lat/lon"})
+
+    if args.get("input"):
+        cmd.extend(["--input", str(args["input"])])
 
     if args.get("product"):
         cmd.extend(["--product", args["product"]])
@@ -329,6 +341,9 @@ def wx_radar_image(args: dict, **kwargs) -> str:
 
     range_km = args.get("range_km", 200)
     cmd.extend(["--range-km", str(range_km)])
+
+    if storm_cells:
+        cmd.append("--storm-cells")
 
     # Output to temp dir
     out_path = str(_IMG_DIR / f"radar_{args.get('site', 'auto')}_{os.getpid()}.png")
@@ -357,10 +372,86 @@ def wx_radar_image(args: dict, **kwargs) -> str:
         return json.dumps({"error": f"radar image failed: {e}"})
 
 
+def _run_nexrad(args: dict, *, storm_cells: bool = False) -> str:
+    cmd = [NEXRAD_RENDER]
+
+    if args.get("site"):
+        cmd.extend(["--site", args["site"].upper()])
+    elif args.get("lat") is not None and args.get("lon") is not None:
+        cmd.extend(["--lat", str(args["lat"]), "--lon", str(args["lon"])])
+    else:
+        return json.dumps({"error": "Provide site or lat/lon"})
+
+    if args.get("input"):
+        cmd.extend(["--input", str(args["input"])])
+
+    if args.get("product"):
+        cmd.extend(["--product", args["product"]])
+
+    size = args.get("size", 1024)
+    cmd.extend(["--size", str(size)])
+
+    min_dbz = args.get("min_dbz", 10)
+    cmd.extend(["--min-dbz", str(min_dbz)])
+
+    range_km = args.get("range_km", 200)
+    cmd.extend(["--range-km", str(range_km)])
+
+    if storm_cells:
+        cmd.append("--storm-cells")
+
+    out_path = str(_IMG_DIR / f"radar_nexrad_{args.get('site', 'auto')}_{os.getpid()}.png")
+    cmd.extend(["-o", out_path])
+
+    try:
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=60
+        )
+        if result.returncode != 0:
+            err = result.stderr.strip()
+            return json.dumps({"error": err or f"nexrad-render-cli exited {result.returncode}"})
+
+        stdout = result.stdout.strip()
+        if not stdout:
+            return json.dumps({"error": "nexrad-render-cli returned no output"})
+
+        data = json.loads(stdout)
+        data["image_file"] = os.path.basename(data.get("image_path", ""))
+        return json.dumps(data)
+    except subprocess.TimeoutExpired:
+        return json.dumps({"error": "nexrad-render-cli timed out (60s)"})
+    except FileNotFoundError:
+        return json.dumps({"error": f"nexrad-render-cli not found at {NEXRAD_RENDER}"})
+    except Exception as e:
+        return json.dumps({"error": f"radar image failed: {e}"})
+
+
+def _run_radar_backend(args: dict, *, storm_cells: bool = False) -> str:
+    if RADAR_BACKEND == "rustdar":
+        return _run_rustdar(args, storm_cells=storm_cells)
+    if RADAR_BACKEND == "nexrad":
+        return _run_nexrad(args, storm_cells=storm_cells)
+    return json.dumps({"error": f"Unsupported RADAR_BACKEND '{RADAR_BACKEND}'"})
+
+
+def wx_radar_image(args: dict, **kwargs) -> str:
+    return _run_radar_backend(args, storm_cells=False)
+
+
 def wx_storm_image(args: dict, **kwargs) -> str:
-    # Same as radar but could add --storm-cells flag when available
-    site = args.get("site")
-    if not site:
-        return json.dumps({"error": "site is required"})
-    # For now, render radar with cell detection markers
-    return wx_radar_image({"site": site, "product": "ref", "size": 1024, "min_dbz": 10}, **kwargs)
+    storm_args = {
+        "product": "ref",
+        "size": args.get("size", 1024),
+        "min_dbz": args.get("min_dbz", 10),
+        "range_km": args.get("range_km", 200),
+    }
+
+    if args.get("site"):
+        storm_args["site"] = args["site"]
+    elif args.get("lat") is not None and args.get("lon") is not None:
+        storm_args["lat"] = args["lat"]
+        storm_args["lon"] = args["lon"]
+    else:
+        return json.dumps({"error": "Provide site or lat/lon"})
+
+    return _run_radar_backend(storm_args, storm_cells=True)

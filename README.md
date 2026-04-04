@@ -21,8 +21,8 @@ Data tools call NWS/SPC/METAR APIs directly in Python. All image rendering happe
 | Tool | What it returns |
 |------|-----------------|
 | `wx_model_image` | NWP field rendered as PNG -- 22+ products, 11 verified models, batch support |
-| `wx_radar_image` | NEXRAD Level 2 reflectivity PPI (1024px, 200km range, 10 dBZ noise floor, dark background) |
-| `wx_storm_image` | Radar with storm cell analysis overlaid |
+| `wx_radar_image` | NEXRAD Level 2 radar image through the current radar backend (default rustdar) |
+| `wx_storm_image` | Reflectivity image with storm-analysis overlays plus detection metadata |
 
 ### Calculations (Rust via PyO3)
 | Tool | What it returns |
@@ -133,8 +133,18 @@ cargo build --release --bin run_case
 # Copy plugin to Hermes
 cp -r weather ~/.hermes/plugins/
 
-# (Optional) Set radar binary path if not at ~/rustdar/
+## Radar
+
+Hermes keeps a stable radar tool contract and routes it through the configured radar backend. The default backend is `rustdar` via the `radar-render` CLI.
+
+Supported radar products:
+- `ref`, `vel`, `sw`, `zdr`, `rho`, `phi`: available through both radar backends
+- `srv`, `vil`: currently available through the `rustdar` backend only
+
+# (Optional) Select radar backend and binary path
+export RADAR_BACKEND=rustdar
 export RADAR_RENDER_PATH=/path/to/radar-render
+export NEXRAD_RENDER_PATH=/path/to/nexrad-render-cli
 
 # (Optional) Set ECAPE runner path if not at ~/ecape-rs/target/release/
 export ECAPE_RS_RUNNER=/path/to/run_case

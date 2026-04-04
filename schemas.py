@@ -174,7 +174,7 @@ WX_RADAR_IMAGE = {
     "name": "wx_radar_image",
     "description": (
         "Render NEXRAD radar as a PNG â€” high-resolution Level 2 data with "
-        "bilinear interpolation. Shows reflectivity, velocity, or dual-pol products. "
+        "bilinear interpolation through the current radar backend. Shows reflectivity, velocity, or dual-pol products. "
         "Default: 1024px, 200km range, 10dBZ noise filter. "
         "Specify a NEXRAD site (e.g., KTLX) or lat/lon to find nearest."
     ),
@@ -186,8 +186,11 @@ WX_RADAR_IMAGE = {
             "lon": {"type": "number", "description": "Longitude (finds nearest radar)"},
             "product": {
                 "type": "string",
-                "enum": ["ref", "vel", "sw", "zdr", "rho", "phi"],
-                "description": "Radar product (default: ref)",
+                "enum": ["ref", "vel", "sw", "zdr", "rho", "phi", "srv", "vil"],
+                "description": (
+                    "Radar product (default: ref). "
+                    "srv and vil are currently available only through the rustdar backend."
+                ),
             },
             "size": {"type": "integer", "description": "Image size in pixels (default: 1024)"},
             "min_dbz": {"type": "number", "description": "Minimum dBZ threshold (default: 10). Use 0 for no filter."},
@@ -199,15 +202,20 @@ WX_RADAR_IMAGE = {
 WX_STORM_IMAGE = {
     "name": "wx_storm_image",
     "description": (
-        "Render radar with storm cell analysis â€” shows reflectivity with "
-        "identified cells and rotation markers. Use during active severe weather."
+        "Render radar with storm analysis overlays â€” shows reflectivity with "
+        "mesocyclone, TVS, hail, or storm-cell markers depending on the active "
+        "radar backend, and returns structured analysis metadata alongside the PNG."
     ),
     "parameters": {
         "type": "object",
         "properties": {
             "site": {"type": "string", "description": "NEXRAD 4-letter site ID (e.g., KTLX)"},
+            "lat": {"type": "number", "description": "Latitude (finds nearest radar)"},
+            "lon": {"type": "number", "description": "Longitude (finds nearest radar)"},
+            "size": {"type": "integer", "description": "Image size in pixels (default: 1024)"},
+            "min_dbz": {"type": "number", "description": "Minimum dBZ threshold (default: 10). Use 0 for no filter."},
+            "range_km": {"type": "number", "description": "Display range in km (default: 200)"},
         },
-        "required": ["site"],
     },
 }
 
