@@ -304,7 +304,7 @@ WX_ECAPE = {
             "storm_motion_type": {
                 "type": "string",
                 "enum": ["right_moving", "left_moving", "mean_wind", "user_defined"],
-                "description": "Storm-motion method (default: right_moving)",
+                "description": "Storm-motion method: Bunkers right mover, Bunkers left mover, Bunkers mean wind, or user-defined (default: right_moving)",
             },
             "storm_motion_u_ms": {
                 "type": "number",

@@ -74,6 +74,11 @@ Average render time: 177ms per image.
 - Defaults: `cape_type=most_unstable`, `storm_motion_type=right_moving`, `pseudoadiabatic=true`
 - Returns: `ECAPE`, `NCAPE`, `CAPE`, `CIN`, `LFC`, `EL`, storm-motion `u/v`
 - Optional: `include_parcel_profile=true` to return the full aligned parcel path arrays
+- Supported storm motion modes:
+- `right_moving` = Bunkers right mover
+- `left_moving` = Bunkers left mover
+- `mean_wind` = Bunkers mean wind
+- `user_defined` = explicit `storm_motion_u_ms` / `storm_motion_v_ms`
 
 ## Stack
 
