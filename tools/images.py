@@ -253,14 +253,20 @@ def wx_model_image(args: dict, **kwargs) -> str:
             except Exception as e:
                 try:
                     from rustweather import plot
+                    fallback_search = var
+                    fallback_title = title
+                    if var.lower() not in {"stp", "scp", "ehi"}:
+                        fallback_search = resolve_image_search(var, model_name)
+                        fallback_title = None
 
                     plot(
                         model=model_name,
-                        search=var,
+                        search=fallback_search,
                         fxx=fhour,
                         date=date_str,
                         area=area,
                         save=path,
+                        title=fallback_title,
                     )
                     if os.path.isfile(path):
                         results.append({"image_path": path, "image_file": os.path.basename(path), "variable": var, "renderer": "rustweather-fallback"})
