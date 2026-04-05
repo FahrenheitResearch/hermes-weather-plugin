@@ -146,15 +146,40 @@ def _crop_to_region(data, lat_arr, lon_arr, lat, lon, radius_km):
 def _load_plot_data(H, var, model_name):
     import numpy as np
 
+    def _download_first_available(search_options):
+        if isinstance(search_options, str):
+            search_options = [search_options]
+        errors = []
+        for search_str in search_options:
+            try:
+                return _download_scalar(H, search_str)
+            except Exception as exc:
+                errors.append(f"{search_str}: {exc}")
+        raise RuntimeError("; ".join(errors))
+
     composites = {
-        "stp": {"cape": "CAPE:surface", "srh": "HLCY:1000-0 m above ground", "shear_u": "VUCSH:0-6000 m above ground", "shear_v": "VVCSH:0-6000 m above ground", "cin": "CIN:surface"},
-        "scp": {"cape": "CAPE:surface", "srh": "HLCY:3000-0 m above ground", "shear_u": "VUCSH:0-6000 m above ground", "shear_v": "VVCSH:0-6000 m above ground"},
-        "ehi": {"cape": "CAPE:surface", "srh": "HLCY:1000-0 m above ground"},
+        "stp": {
+            "cape": ["CAPE:surface"],
+            "srh": ["HLCY:1000-0 m above ground", "HLCY:1000-0 m above ground level"],
+            "shear_u": ["VUCSH:0-6000 m above ground", "VUCSH:0-6000 m above ground level"],
+            "shear_v": ["VVCSH:0-6000 m above ground", "VVCSH:0-6000 m above ground level"],
+            "cin": ["CIN:surface"],
+        },
+        "scp": {
+            "cape": ["CAPE:surface"],
+            "srh": ["HLCY:3000-0 m above ground", "HLCY:3000-0 m above ground level"],
+            "shear_u": ["VUCSH:0-6000 m above ground", "VUCSH:0-6000 m above ground level"],
+            "shear_v": ["VVCSH:0-6000 m above ground", "VVCSH:0-6000 m above ground level"],
+        },
+        "ehi": {
+            "cape": ["CAPE:surface"],
+            "srh": ["HLCY:1000-0 m above ground", "HLCY:1000-0 m above ground level"],
+        },
     }
     if var in composites:
         fields, lat_arr, lon_arr = {}, None, None
-        for key, search_str in composites[var].items():
-            vals, lat_arr, lon_arr = _download_scalar(H, search_str)
+        for key, search_options in composites[var].items():
+            vals, lat_arr, lon_arr = _download_first_available(search_options)
             fields[key] = vals
         if var == "stp":
             shear_mag = np.sqrt(fields["shear_u"] ** 2 + fields["shear_v"] ** 2)

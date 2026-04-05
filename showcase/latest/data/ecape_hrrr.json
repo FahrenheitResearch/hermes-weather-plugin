@@ -1,0 +1,4 @@
+{
+  "error": "ecape-rs runner not found",
+  "hint": "Install a Rust toolchain for automatic first-use builds or set ECAPE_RS_RUNNER to an existing run_case binary."
+}

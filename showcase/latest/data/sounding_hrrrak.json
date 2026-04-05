@@ -1,0 +1,98 @@
+{
+  "location": {
+    "lat": 61.2181,
+    "lon": -149.9003
+  },
+  "model": "hrrrak",
+  "cycle": "2026-04-05 00:00:00",
+  "parameters": {
+    "sfc_pressure_hpa": 1013.2,
+    "sfc_temp_c": 3.6,
+    "sfc_temp_f": 38.4,
+    "sfc_dewpoint_c": -9.8,
+    "sfc_dewpoint_f": 14.4,
+    "sfc_wind_kt": 6.2,
+    "sfc_wind_dir": 20,
+    "lcl_pressure_hpa": 822.9,
+    "lcl_temp_c": -12.4,
+    "lcl_height_m_agl": 1626,
+    "lfc_pressure_hpa": NaN,
+    "el_pressure_hpa": NaN,
+    "sbcape_jkg": 0.2,
+    "sbcin_jkg": -36195.9,
+    "mlcape_jkg": 7.1,
+    "mlcin_jkg": -36165.7,
+    "mucape_jkg": 0.0,
+    "mucin_jkg": -34179.8,
+    "lifted_index": 7.3,
+    "k_index": 13.3,
+    "total_totals": 52.2,
+    "bulk_shear_0_6km_kt": 35.2,
+    "bulk_shear_0_1km_kt": 11.4,
+    "precipitable_water_mm": 6.1,
+    "bunkers_rm_kt": 17.1,
+    "stp_fixed": 0.0,
+    "lapse_rate_0_3km_c_km": 7.7,
+    "lapse_rate_700_500_c_km": 7.2,
+    "freezing_level_m_agl": 518
+  },
+  "profile": [
+    {
+      "pressure_hpa": 1000,
+      "height_m": 164,
+      "temp_c": 2.5,
+      "dewpoint_c": -11.3,
+      "wind_dir": 22,
+      "wind_kt": 7.9
+    },
+    {
+      "pressure_hpa": 925,
+      "height_m": 788,
+      "temp_c": -2.2,
+      "dewpoint_c": -12.6,
+      "wind_dir": 107,
+      "wind_kt": 6.4
+    },
+    {
+      "pressure_hpa": 850,
+      "height_m": 1453,
+      "temp_c": -7.4,
+      "dewpoint_c": -12.4,
+      "wind_dir": 147,
+      "wind_kt": 9.7
+    },
+    {
+      "pressure_hpa": 700,
+      "height_m": 2932,
+      "temp_c": -18.6,
+      "dewpoint_c": -21.5,
+      "wind_dir": 173,
+      "wind_kt": 15.7
+    },
+    {
+      "pressure_hpa": 500,
+      "height_m": 5357,
+      "temp_c": -36.0,
+      "dewpoint_c": -39.8,
+      "wind_dir": 173,
+      "wind_kt": 26.7
+    },
+    {
+      "pressure_hpa": 300,
+      "height_m": 8734,
+      "temp_c": -51.8,
+      "dewpoint_c": -78.9,
+      "wind_dir": 177,
+      "wind_kt": 27.0
+    },
+    {
+      "pressure_hpa": 250,
+      "height_m": 9930,
+      "temp_c": -47.4,
+      "dewpoint_c": -80.5,
+      "wind_dir": 218,
+      "wind_kt": 10.6
+    }
+  ],
+  "levels_available": 40
+}

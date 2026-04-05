@@ -1,0 +1,35 @@
+{
+  "generated_utc": "2026-04-05T01:30:33.273095+00:00",
+  "image_models": [
+    "aigfs",
+    "gdas",
+    "gefs",
+    "gfs",
+    "graphcast",
+    "hiresw",
+    "hrrr",
+    "hrrrak",
+    "nam",
+    "nbm",
+    "rap"
+  ],
+  "profile_models": [
+    "gdas",
+    "gfs",
+    "graphcast",
+    "hrrr",
+    "hrrrak",
+    "rrfs"
+  ],
+  "product_groups": {
+    "severe": {
+      "title": "Severe Weather Products"
+    },
+    "quicklook": {
+      "title": "Quicklook Maps"
+    }
+  },
+  "image_group_count": 22,
+  "image_file_count": 29,
+  "sounding_count": 6
+}

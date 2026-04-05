@@ -32,14 +32,22 @@ PROFILE_LOCS = {model: (ALASKA_LOC if model == 'hrrrak' else DEFAULT_LOC) for mo
 IMAGE_LOCS = {model: (ALASKA_LOC if model == 'hrrrak' else DEFAULT_LOC) for model in IMAGE_MODELS}
 
 PRODUCT_GROUPS = {
-    'severe': {
-        'title': 'Severe Weather Products',
-        'vars': ['cape', 'stp', 'refl'],
-    },
-    'quicklook': {
-        'title': 'Quicklook Maps',
-        'vars': ['temp'],
-    },
+    'severe': {'title': 'Severe Weather Products'},
+    'quicklook': {'title': 'Quicklook Maps'},
+}
+
+SHOWCASE_VARS_BY_MODEL = {
+    'aigfs': {'severe': ['cape'], 'quicklook': ['temp']},
+    'gdas': {'severe': ['cape', 'refl'], 'quicklook': ['temp']},
+    'gefs': {'severe': ['cape'], 'quicklook': ['temp']},
+    'gfs': {'severe': ['cape', 'scp', 'ehi', 'refl'], 'quicklook': ['temp']},
+    'graphcast': {'severe': ['cape'], 'quicklook': ['temp']},
+    'hiresw': {'severe': ['cape', 'refl'], 'quicklook': ['temp']},
+    'hrrr': {'severe': ['cape', 'stp', 'scp', 'ehi', 'refl'], 'quicklook': ['temp']},
+    'hrrrak': {'severe': ['cape', 'stp', 'scp', 'ehi', 'refl'], 'quicklook': ['temp']},
+    'nam': {'severe': ['cape', 'stp', 'scp', 'ehi', 'refl'], 'quicklook': ['temp']},
+    'nbm': {'severe': ['cape'], 'quicklook': ['temp']},
+    'rap': {'severe': ['cape', 'refl'], 'quicklook': ['temp']},
 }
 
 
@@ -51,8 +59,11 @@ image_results = []
 for group_key, group in PRODUCT_GROUPS.items():
     for model in IMAGE_MODELS:
         loc = IMAGE_LOCS[model]
+        vars_for_model = SHOWCASE_VARS_BY_MODEL.get(model, {}).get(group_key, [])
+        if not vars_for_model:
+            continue
         args = {
-            'var': ','.join(group['vars']),
+            'var': ','.join(vars_for_model),
             'model': model,
             'lat': loc['lat'],
             'lon': loc['lon'],
@@ -76,7 +87,7 @@ for group_key, group in PRODUCT_GROUPS.items():
             'location': loc,
             'cycle': raw.get('cycle'),
             'forecast_hour': raw.get('forecast_hour'),
-            'requested_vars': list(group['vars']),
+            'requested_vars': list(vars_for_model),
             'images': raw.get('images', []),
             'image_files': files,
             'error': raw.get('error'),
@@ -138,7 +149,8 @@ html_parts = [
 
 for group_key, group in PRODUCT_GROUPS.items():
     html_parts.append(f'<div class="group"><h2>{escape(group["title"])}</h2>')
-    html_parts.append(f'<p class="muted">Requested products: {escape(", ".join(group["vars"]))}</p>')
+    group_requested = sorted({var for item in image_results if item['group'] == group_key for var in item.get('requested_vars', [])})
+    html_parts.append(f'<p class="muted">Requested products: {escape(", ".join(group_requested))}</p>')
     html_parts.append('<div class="grid">')
     for item in [r for r in image_results if r['group'] == group_key]:
         html_parts.append('<div class="card">')

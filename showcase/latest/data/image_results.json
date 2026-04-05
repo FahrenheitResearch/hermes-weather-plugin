@@ -1,0 +1,715 @@
+[
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "aigfs",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape"
+    ],
+    "images": [
+      {
+        "variable": "cape",
+        "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\drew\\\\.cache\\\\herbie\\\\aigfs\\\\20260404\\\\subset_62efb1fe__aigfs.t18z.sfc.f000.grib2'"
+      }
+    ],
+    "image_files": [],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "gdas",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape",
+      "refl"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_cape_gdas_f0_109452.png",
+        "image_file": "model_cape_gdas_f0_109452.png",
+        "variable": "cape",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_gdas_cape.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_refl_gdas_f0_109452.png",
+        "image_file": "model_refl_gdas_f0_109452.png",
+        "variable": "refl",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_gdas_refl.png"
+      }
+    ],
+    "image_files": [
+      "severe_gdas_cape.png",
+      "severe_gdas_refl.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "gefs",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": null,
+    "forecast_hour": null,
+    "requested_vars": [
+      "cape"
+    ],
+    "images": [],
+    "image_files": [],
+    "error": "No available cycle found for model=gefs fhour=0"
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "gfs",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape",
+      "scp",
+      "ehi",
+      "refl"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_cape_gfs_f0_109452.png",
+        "image_file": "model_cape_gfs_f0_109452.png",
+        "variable": "cape",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_gfs_cape.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_scp_gfs_f0_109452.png",
+        "image_file": "model_scp_gfs_f0_109452.png",
+        "variable": "scp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_gfs_scp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_ehi_gfs_f0_109452.png",
+        "image_file": "model_ehi_gfs_f0_109452.png",
+        "variable": "ehi",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_gfs_ehi.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_refl_gfs_f0_109452.png",
+        "image_file": "model_refl_gfs_f0_109452.png",
+        "variable": "refl",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_gfs_refl.png"
+      }
+    ],
+    "image_files": [
+      "severe_gfs_cape.png",
+      "severe_gfs_scp.png",
+      "severe_gfs_ehi.png",
+      "severe_gfs_refl.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "graphcast",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": null,
+    "forecast_hour": null,
+    "requested_vars": [
+      "cape"
+    ],
+    "images": [],
+    "image_files": [],
+    "error": "No available cycle found for model=graphcast fhour=0"
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "hiresw",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": null,
+    "forecast_hour": null,
+    "requested_vars": [
+      "cape",
+      "refl"
+    ],
+    "images": [],
+    "image_files": [],
+    "error": "No available cycle found for model=hiresw fhour=0"
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "hrrr",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape",
+      "stp",
+      "scp",
+      "ehi",
+      "refl"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_cape_hrrr_f0_109452.png",
+        "image_file": "model_cape_hrrr_f0_109452.png",
+        "variable": "cape",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrr_cape.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_stp_hrrr_f0_109452.png",
+        "image_file": "model_stp_hrrr_f0_109452.png",
+        "variable": "stp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrr_stp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_scp_hrrr_f0_109452.png",
+        "image_file": "model_scp_hrrr_f0_109452.png",
+        "variable": "scp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrr_scp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_ehi_hrrr_f0_109452.png",
+        "image_file": "model_ehi_hrrr_f0_109452.png",
+        "variable": "ehi",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrr_ehi.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_refl_hrrr_f0_109452.png",
+        "image_file": "model_refl_hrrr_f0_109452.png",
+        "variable": "refl",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrr_refl.png"
+      }
+    ],
+    "image_files": [
+      "severe_hrrr_cape.png",
+      "severe_hrrr_stp.png",
+      "severe_hrrr_scp.png",
+      "severe_hrrr_ehi.png",
+      "severe_hrrr_refl.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "hrrrak",
+    "location": {
+      "name": "Anchorage, AK",
+      "lat": 61.2181,
+      "lon": -149.9003,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape",
+      "stp",
+      "scp",
+      "ehi",
+      "refl"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_cape_hrrrak_f0_109452.png",
+        "image_file": "model_cape_hrrrak_f0_109452.png",
+        "variable": "cape",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrrak_cape.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_stp_hrrrak_f0_109452.png",
+        "image_file": "model_stp_hrrrak_f0_109452.png",
+        "variable": "stp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrrak_stp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_scp_hrrrak_f0_109452.png",
+        "image_file": "model_scp_hrrrak_f0_109452.png",
+        "variable": "scp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrrak_scp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_ehi_hrrrak_f0_109452.png",
+        "image_file": "model_ehi_hrrrak_f0_109452.png",
+        "variable": "ehi",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrrak_ehi.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_refl_hrrrak_f0_109452.png",
+        "image_file": "model_refl_hrrrak_f0_109452.png",
+        "variable": "refl",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_hrrrak_refl.png"
+      }
+    ],
+    "image_files": [
+      "severe_hrrrak_cape.png",
+      "severe_hrrrak_stp.png",
+      "severe_hrrrak_scp.png",
+      "severe_hrrrak_ehi.png",
+      "severe_hrrrak_refl.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "nam",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape",
+      "stp",
+      "scp",
+      "ehi",
+      "refl"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_cape_nam_f0_109452.png",
+        "image_file": "model_cape_nam_f0_109452.png",
+        "variable": "cape",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_nam_cape.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_stp_nam_f0_109452.png",
+        "image_file": "model_stp_nam_f0_109452.png",
+        "variable": "stp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_nam_stp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_scp_nam_f0_109452.png",
+        "image_file": "model_scp_nam_f0_109452.png",
+        "variable": "scp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_nam_scp.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_ehi_nam_f0_109452.png",
+        "image_file": "model_ehi_nam_f0_109452.png",
+        "variable": "ehi",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_nam_ehi.png"
+      },
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_refl_nam_f0_109452.png",
+        "image_file": "model_refl_nam_f0_109452.png",
+        "variable": "refl",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_nam_refl.png"
+      }
+    ],
+    "image_files": [
+      "severe_nam_cape.png",
+      "severe_nam_stp.png",
+      "severe_nam_scp.png",
+      "severe_nam_ehi.png",
+      "severe_nam_refl.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "nbm",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_cape_nbm_f0_109452.png",
+        "image_file": "model_cape_nbm_f0_109452.png",
+        "variable": "cape",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "severe_nbm_cape.png"
+      }
+    ],
+    "image_files": [
+      "severe_nbm_cape.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "severe",
+    "group_title": "Severe Weather Products",
+    "model": "rap",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 23:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "cape",
+      "refl"
+    ],
+    "images": [
+      {
+        "variable": "cape",
+        "error": "cannot import name 'render_grib' from 'wrf._wrf' (C:\\Users\\drew\\wrf-rust\\python\\wrf\\_wrf.cp313-win_amd64.pyd)"
+      },
+      {
+        "variable": "refl",
+        "error": "cannot import name 'render_grib' from 'wrf._wrf' (C:\\Users\\drew\\wrf-rust\\python\\wrf\\_wrf.cp313-win_amd64.pyd)"
+      }
+    ],
+    "image_files": [],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "aigfs",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_aigfs_f0_109452.png",
+        "image_file": "model_temp_aigfs_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_aigfs_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_aigfs_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "gdas",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_gdas_f0_109452.png",
+        "image_file": "model_temp_gdas_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_gdas_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_gdas_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "gefs",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": null,
+    "forecast_hour": null,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [],
+    "image_files": [],
+    "error": "No available cycle found for model=gefs fhour=0"
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "gfs",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_gfs_f0_109452.png",
+        "image_file": "model_temp_gfs_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_gfs_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_gfs_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "graphcast",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": null,
+    "forecast_hour": null,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [],
+    "image_files": [],
+    "error": "No available cycle found for model=graphcast fhour=0"
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "hiresw",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": null,
+    "forecast_hour": null,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [],
+    "image_files": [],
+    "error": "No available cycle found for model=hiresw fhour=0"
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "hrrr",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_hrrr_f0_109452.png",
+        "image_file": "model_temp_hrrr_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_hrrr_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_hrrr_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "hrrrak",
+    "location": {
+      "name": "Anchorage, AK",
+      "lat": 61.2181,
+      "lon": -149.9003,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_hrrrak_f0_109452.png",
+        "image_file": "model_temp_hrrrak_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_hrrrak_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_hrrrak_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "nam",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-04 18:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_nam_f0_109452.png",
+        "image_file": "model_temp_nam_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_nam_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_nam_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "nbm",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "image_path": "C:\\Users\\drew\\.hermes\\weather\\images\\model_temp_nbm_f0_109452.png",
+        "image_file": "model_temp_nbm_f0_109452.png",
+        "variable": "temp",
+        "renderer": "rustweather-fallback",
+        "showcase_image": "quicklook_nbm_temp.png"
+      }
+    ],
+    "image_files": [
+      "quicklook_nbm_temp.png"
+    ],
+    "error": null
+  },
+  {
+    "group": "quicklook",
+    "group_title": "Quicklook Maps",
+    "model": "rap",
+    "location": {
+      "name": "Norman, OK",
+      "lat": 35.333,
+      "lon": -97.278,
+      "radius_km": 700
+    },
+    "cycle": "2026-04-05 00:00",
+    "forecast_hour": 0,
+    "requested_vars": [
+      "temp"
+    ],
+    "images": [
+      {
+        "variable": "temp",
+        "error": "cannot import name 'render_grib' from 'wrf._wrf' (C:\\Users\\drew\\wrf-rust\\python\\wrf\\_wrf.cp313-win_amd64.pyd)"
+      }
+    ],
+    "image_files": [],
+    "error": null
+  }
+]
