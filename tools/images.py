@@ -103,6 +103,13 @@ def _extract_grid(ds):
     return data, lat_arr, lon_arr
 
 
+def _region_area(lat, lon, radius_km):
+    if lat is None or lon is None:
+        return "conus"
+    deg = float(radius_km) / 111.0
+    return (lon - deg, lon + deg, lat - deg, lat + deg)
+
+
 def _download_scalar(H, search):
     ds = H.xarray(search, verbose=False, remove_grib=False)
     return _extract_grid(ds)
@@ -194,6 +201,7 @@ def wx_model_image(args: dict, **kwargs) -> str:
         lat = args.get("lat")
         lon = args.get("lon")
         radius_km = args.get("radius_km", 500)
+        area = _region_area(lat, lon, radius_km)
         results = []
 
         if not date_str:
@@ -243,6 +251,22 @@ def wx_model_image(args: dict, **kwargs) -> str:
                     raise RuntimeError(f"failed to render {var} with rusbie + wrf-rust")
                 results.append({"image_path": path, "image_file": os.path.basename(path), "variable": var})
             except Exception as e:
+                try:
+                    from rustweather import plot
+
+                    plot(
+                        model=model_name,
+                        search=var,
+                        fxx=fhour,
+                        date=date_str,
+                        area=area,
+                        save=path,
+                    )
+                    if os.path.isfile(path):
+                        results.append({"image_path": path, "image_file": os.path.basename(path), "variable": var, "renderer": "rustweather-fallback"})
+                        continue
+                except Exception:
+                    pass
                 results.append({"variable": var, "error": str(e)})
         return json.dumps({
             "model": model_name.upper(),

@@ -16,6 +16,7 @@ dependencies = [
   "metrust",
   "cfrust @ git+https://github.com/FahrenheitResearch/cfrust.git",
   "rusbie @ git+https://github.com/FahrenheitResearch/rusbie.git",
+  "rustweather @ git+https://github.com/FahrenheitResearch/rustweather.git",
   "wrf-rust @ git+https://github.com/FahrenheitResearch/wrf-rust.git",
 ]
 

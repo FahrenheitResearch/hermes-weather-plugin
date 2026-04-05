@@ -21,7 +21,7 @@ Hermes should auto-discover the plugin through the Python entry point.
 The plugin is Python-first, but several heavy paths use Rust binaries or Rust-backed Python packages.
 
 - Data tools call NWS, SPC, METAR, and Open-Meteo directly from Python.
-- `wx_model_image` uses `rusbie` for model access and `wrf-rust` for rendering.
+- `wx_model_image` uses `rusbie` for model access, tries the newer `wrf-rust` render path first, and falls back to `rustweather` where needed for GRIB model-map rendering.
 - `wx_radar_image` and `wx_storm_image` use a radar backend binary.
 - `wx_ecape` uses the `ecape-rs` runner.
 - `wx_calc` and `wx_sounding` use `metrust` in-process.
@@ -171,6 +171,7 @@ Python package dependencies:
 - `numpy`
 - `metrust`
 - `rusbie`
+- `rustweather`
 - `wrf-rust`
 
 Optional system dependency for first-use binary builds:
